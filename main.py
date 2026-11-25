@@ -31,7 +31,11 @@ def main() -> None:
     assert text.strip(), "scene must not be only whitespace"
     out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "entry.txt").write_text(text + "\n", encoding="utf-8")
+    out_path = out_dir / "entry.txt"
+    out_path.write_text(text + "\n", encoding="utf-8")
+    # Read the file back: the graded run must ship exactly this scene.
+    assert out_path.read_text(encoding="utf-8").strip() == text
+    assert 1 <= len(out_path.read_text(encoding="utf-8").strip()) <= 280
 
 
 if __name__ == "__main__":
